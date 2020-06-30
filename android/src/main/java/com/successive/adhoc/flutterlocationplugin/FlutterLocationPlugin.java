@@ -31,8 +31,10 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.successive.adhoc.flutterlocationplugin.util.LocationFusedAPIUtility;
+import com.successive.adhoc.flutterlocationplugin.util.XenGeolocationUtil;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -66,30 +68,32 @@ public class FlutterLocationPlugin implements MethodCallHandler, PluginRegistry.
         this._result = result;
         if (call.method.equals("getLocation")) {
 
-            Dexter.withActivity(_activity)
-                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .withListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
-                            if (isGPSEnabled(_activity)) getLocation();
-                            else {
-                                buildEnableGPSDialog();
-                            }
-                        }
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
-                            Log.v(TAG, "PERMISSION_DENIED");
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("status", false);
-                            map.put("message", "Location permission is required");
-                            _result.success(map);
-                        }
+            getLocation();
 
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                            token.continuePermissionRequest();
-                        }
-                    }).check();
+//            Dexter.withActivity(_activity)
+//                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+//                    .withListener(new PermissionListener() {
+//                        @Override
+//                        public void onPermissionGranted(PermissionGrantedResponse response) {
+//                            if (isGPSEnabled(_activity)) getLocation();
+//                            else {
+//                                buildEnableGPSDialog();
+//                            }
+//                        }
+//                        @Override
+//                        public void onPermissionDenied(PermissionDeniedResponse response) {
+//                            Log.v(TAG, "PERMISSION_DENIED");
+//                            HashMap<String, Object> map = new HashMap<>();
+//                            map.put("status", false);
+//                            map.put("message", "Location permission is required");
+//                            _result.success(map);
+//                        }
+//
+//                        @Override
+//                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+//                            token.continuePermissionRequest();
+//                        }
+//                    }).check();
 
         } else {
             result.notImplemented();
@@ -166,18 +170,23 @@ public class FlutterLocationPlugin implements MethodCallHandler, PluginRegistry.
 
 
     private void getLocation() {
-        final LocationFusedAPIUtility fusedAPI = new LocationFusedAPIUtility(_activity);
-        fusedAPI.requestSingleUpdate(new LocationFusedAPIUtility.LocationCallback() {
-            @Override
-            public void onNewLocationAvailable(LocationFusedAPIUtility.GPSCoordinates location) {
-                Log.e("LAT_LNG", "LAT : " + location.latitude + "\n" + "LNG : " + location.longitude);
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("status", true);
-                map.put("latitude", location.latitude);
-                map.put("longitude", location.longitude);
-                _result.success(map);
-            }
-        });
+
+        Map resultMap = XenGeolocationUtil.getInstance().getLocations(_activity);
+
+        _result.success(resultMap);
+
+//        final LocationFusedAPIUtility fusedAPI = new LocationFusedAPIUtility(_activity);
+//        fusedAPI.requestSingleUpdate(new LocationFusedAPIUtility.LocationCallback() {
+//            @Override
+//            public void onNewLocationAvailable(LocationFusedAPIUtility.GPSCoordinates location) {
+//                Log.e("LAT_LNG", "LAT : " + location.latitude + "\n" + "LNG : " + location.longitude);
+//                HashMap<String, Object> map = new HashMap<>();
+//                map.put("status", true);
+//                map.put("latitude", location.latitude);
+//                map.put("longitude", location.longitude);
+//                _result.success(map);
+//            }
+//        });
     }
 
 
