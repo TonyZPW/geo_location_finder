@@ -2,7 +2,7 @@
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
-  s.name             = 'flutter_location_plugin'
+  s.name             = 'geo_location_finder'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter location plugin.'
   s.description      = <<-DESC
