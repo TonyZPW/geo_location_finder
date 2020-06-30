@@ -38,7 +38,7 @@ public class XenGeolocationUtil{
 
     public Map getLocations(Context context){
         String strLocation = "0,0";
-        DecimalFormat df = new DecimalFormat("#####0.0000");
+//        DecimalFormat df = new DecimalFormat("#####0.0000");
 
         HashMap returnMap = new HashMap();
 
@@ -97,22 +97,22 @@ public class XenGeolocationUtil{
 
     }
 
-    /**
-     * LocationListern监听器
-     * 参数：地理位置提供器、监听位置变化的时间间隔、位置变化的距离间隔、LocationListener监听器
-     */
-    private final LocationListener locationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-
-        }
-        public void onProviderDisabled(String provider){
-            Log.i("Tobin", "Provider now is disabled..");
-        }
-        public void onProviderEnabled(String provider){
-            Log.i("Tobin", "Provider now is enabled..");
-        }
-        public void onStatusChanged(String provider, int status,Bundle extras){ }
-    };
+//    /**
+//     * LocationListern监听器
+//     * 参数：地理位置提供器、监听位置变化的时间间隔、位置变化的距离间隔、LocationListener监听器
+//     */
+//    private final LocationListener locationListener = new LocationListener() {
+//        public void onLocationChanged(Location location) {
+//
+//        }
+//        public void onProviderDisabled(String provider){
+//            Log.i("Tobin", "Provider now is disabled..");
+//        }
+//        public void onProviderEnabled(String provider){
+//            Log.i("Tobin", "Provider now is enabled..");
+//        }
+//        public void onStatusChanged(String provider, int status,Bundle extras){ }
+//    };
 
 
     /**
