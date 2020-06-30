@@ -11,4 +11,5 @@
     FlutterResult       returnResult;
 }
 @property (nonatomic, retain)CLLocationManager *locationManager;
+@property (nonatomic, strong)CLGeocoder          *geoCoder;
 @end

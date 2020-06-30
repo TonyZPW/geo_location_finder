@@ -15,6 +15,10 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getLocation" isEqualToString:call.method]) {
 
+      if(self.geoCoder == nil){
+          
+          _geoCoder = [CLGeocoder new];
+      }
     self.locationManager = [[CLLocationManager alloc]init];
     [self.locationManager setDelegate:self];
     self.locationManager.desiredAccuracy    =   kCLLocationAccuracyBest;
@@ -101,37 +105,37 @@
 }
 
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-{
-
-    if(newLocation.coordinate.latitude != oldLocation.coordinate.latitude && newLocation.coordinate.longitude != oldLocation.coordinate.latitude)
-    {
-        if ([self isValidLocation:newLocation withOldLocation:oldLocation])
-        {
-            currentLocation = newLocation;
-            NSString *lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
-            NSString *lng = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
-            NSDictionary *map = @{@"status":@"true",@"latitude":lat, @"longitude":lng};
-            returnResult(map);
-            // Stop location updates
-            [self stopRecievingLocation];
-        }
-    }
-
-    if (!isUserPositionAvailable) {
-
-        isUserPositionAvailable  =   YES;
-        currentLocation          =   newLocation;
-
-        NSString *lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
-        NSString *lng = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
-        NSDictionary *map = @{@"status":@"true",@"latitude":lat, @"longitude":lng};
-        returnResult(map);
-        // Stop location updates
-        [self stopRecievingLocation];
-    }
-
-}
+//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+//{
+//
+//    if(newLocation.coordinate.latitude != oldLocation.coordinate.latitude && newLocation.coordinate.longitude != oldLocation.coordinate.latitude)
+//    {
+//        if ([self isValidLocation:newLocation withOldLocation:oldLocation])
+//        {
+//            currentLocation = newLocation;
+//            NSString *lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+//            NSString *lng = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
+//            NSDictionary *map = @{@"status":@"true",@"latitude":lat, @"longitude":lng};
+//            returnResult(map);
+//            // Stop location updates
+//            [self stopRecievingLocation];
+//        }
+//    }
+//
+//    if (!isUserPositionAvailable) {
+//
+//        isUserPositionAvailable  =   YES;
+//        currentLocation          =   newLocation;
+//
+//        NSString *lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+//        NSString *lng = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
+//        NSDictionary *map = @{@"status":@"true",@"latitude":lat, @"longitude":lng};
+//        returnResult(map);
+//        // Stop location updates
+//        [self stopRecievingLocation];
+//    }
+//
+//}
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
@@ -149,11 +153,34 @@
             
             NSString *lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
             NSString *lng = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];
-            NSDictionary *map = @{@"status":@"true",@"latitude":lat, @"longitude":lng};
-            returnResult(map);
-            // Stop location updates
-            [self stopRecievingLocation];
+            
+            [self.geoCoder reverseGeocodeLocation:newLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+                
+                if(error == nil){
+                  
+                    if(placemarks.count > 0){
+                        
+                        CLPlacemark* firstMark = placemarks.firstObject;
+                                             
+                                             NSDictionary* finalMap = @{@"status":@"true",@"latitude":lat, @"longitude":lng,@"address":firstMark.ISOcountryCode};
+                                             
+                                             self->returnResult(finalMap);
+                    }
+                    else{
+                        NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
+                         self->returnResult(map);
+                    }
+                }
+                else{
+                    NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
+                    self->returnResult(map);
+                }
+                
+            }];
+            
         }
+        
+        [self stopRecievingLocation];
 
         [self logArray:locations];
     }
