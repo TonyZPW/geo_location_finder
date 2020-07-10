@@ -202,7 +202,7 @@
                         NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
                          @try {
                                                             if(self->returnResult != nil){
-                                                                                                               self->returnResult(finalMap);
+                                                                                                               self->returnResult(map);
                                                                                                         }
                                                        } @catch (NSException *exception) {
                                                            
@@ -213,7 +213,7 @@
                     NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
                     @try {
                                                        if(self->returnResult != nil){
-                                                                                                          self->returnResult(finalMap);
+                                                                                                          self->returnResult(map);
                                                                                                    }
                                                   } @catch (NSException *exception) {
                                                       
