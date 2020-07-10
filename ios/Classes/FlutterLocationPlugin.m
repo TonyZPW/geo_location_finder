@@ -61,7 +61,13 @@
     else
     {
         NSDictionary *map = @{@"status":@"false",@"message":@"Location service is disabled."};
-        returnResult(map);
+        
+        @try {
+             returnResult(map);
+        } @catch (NSException *exception) {
+            
+        }
+       
     }
 }
 
@@ -93,13 +99,21 @@
     if ([errorString rangeOfString:@"kCLErrorDomain error 1"].location != NSNotFound)
     {
         NSDictionary *map = @{@"status":@"false",@"message":@"Location service access is denied. Please allow app to access your account in Settings App."};
-        returnResult(map);
+                @try {
+                    returnResult(map);
+               } @catch (NSException *exception) {
+                   
+               }
         finalError = @"Location service access is denied. Please allow app to access your account in Settings App.";
     }
     else{
 
         NSDictionary *map = @{@"status":@"false",@"message":@"Sorry, can't find your location please try again later."};
-        returnResult(map);
+         @try {
+                    returnResult(map);
+               } @catch (NSException *exception) {
+                   
+               }
         finalError = @"Sorry, can't find your location please try again later.";
     }
 }
@@ -164,16 +178,29 @@
                                              
                                              NSDictionary* finalMap = @{@"status":@"true",@"latitude":lat, @"longitude":lng,@"address":firstMark.ISOcountryCode};
                                              
-                                             self->returnResult(finalMap);
+                        @try {
+                                   self->returnResult(finalMap);
+                               } @catch (NSException *exception) {
+                                   
+                               }
+                                            
                     }
                     else{
                         NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
-                         self->returnResult(map);
+                         @try {
+                                                           self->returnResult(map);
+                                                       } @catch (NSException *exception) {
+                                                           
+                                                       }
                     }
                 }
                 else{
                     NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
-                    self->returnResult(map);
+                    @try {
+                                                      self->returnResult(map);
+                                                  } @catch (NSException *exception) {
+                                                      
+                                                  }
                 }
                 
             }];
