@@ -63,7 +63,12 @@
         NSDictionary *map = @{@"status":@"false",@"message":@"Location service is disabled."};
         
         @try {
-             returnResult(map);
+            
+            if(returnResult != nil){
+                
+                  returnResult(map);
+            }
+           
         } @catch (NSException *exception) {
             
         }
@@ -100,7 +105,10 @@
     {
         NSDictionary *map = @{@"status":@"false",@"message":@"Location service access is denied. Please allow app to access your account in Settings App."};
                 @try {
-                    returnResult(map);
+                    if(returnResult != nil){
+                          returnResult(map);
+                    }
+                  
                } @catch (NSException *exception) {
                    
                }
@@ -110,7 +118,9 @@
 
         NSDictionary *map = @{@"status":@"false",@"message":@"Sorry, can't find your location please try again later."};
          @try {
-                    returnResult(map);
+                    if(returnResult != nil){
+                                             returnResult(map);
+                                       }
                } @catch (NSException *exception) {
                    
                }
@@ -179,7 +189,10 @@
                                              NSDictionary* finalMap = @{@"status":@"true",@"latitude":lat, @"longitude":lng,@"address":firstMark.ISOcountryCode};
                                              
                         @try {
-                                   self->returnResult(finalMap);
+                            if(self->returnResult != nil){
+                                                      self->returnResult(finalMap);
+                                               }
+                                 
                                } @catch (NSException *exception) {
                                    
                                }
@@ -188,7 +201,9 @@
                     else{
                         NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
                          @try {
-                                                           self->returnResult(map);
+                                                            if(self->returnResult != nil){
+                                                                                                               self->returnResult(finalMap);
+                                                                                                        }
                                                        } @catch (NSException *exception) {
                                                            
                                                        }
@@ -197,7 +212,9 @@
                 else{
                     NSDictionary *map = @{@"status":@"false",@"message":@"geocoder failed"};
                     @try {
-                                                      self->returnResult(map);
+                                                       if(self->returnResult != nil){
+                                                                                                          self->returnResult(finalMap);
+                                                                                                   }
                                                   } @catch (NSException *exception) {
                                                       
                                                   }
