@@ -153,7 +153,14 @@ public class FlutterLocationPlugin implements MethodCallHandler, PluginRegistry.
 
         Map resultMap = XenGeolocationUtil.getInstance().getLocations(_activity);
 
-        _result.success(resultMap);
+        if(_result != null){
+            try{
+                _result.success(resultMap);
+            }catch(Exception e){
+
+            }
+        }
+
 
 //        final LocationFusedAPIUtility fusedAPI = new LocationFusedAPIUtility(_activity);
 //        fusedAPI.requestSingleUpdate(new LocationFusedAPIUtility.LocationCallback() {
@@ -192,7 +199,15 @@ public class FlutterLocationPlugin implements MethodCallHandler, PluginRegistry.
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", false);
         map.put("message", message);
-        _result.success(map);
+        if(_result != null){
+            try{
+                _result.success(map);
+            }catch(Exception e){
+
+            }
+
+        }
+
     }
 
 }
